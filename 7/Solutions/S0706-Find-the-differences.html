@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>S0706: Намерете разликите</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			vaxInit();
+
+			var geometry = new THREE.BoxBufferGeometry( 10, 10, 10 );
+
+			for( var i=0; i<500; i++)
+			{
+				var color = new THREE.Color( Math.random(), Math.random(), Math.random() );
+
+				var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial({color:color}) );
+
+				object.position.set( THREE.Math.randFloat(-100,100), THREE.Math.randFloat(-60,60), 0 );
+				object.rotation.set( 6*Math.random(), 6*Math.random(), 6*Math.random() ); 
+
+				scene.add( object );
+			}
+			
+
+			function animate()
+			{
+				object.visible = Boolean(Math.round(t*2)%2);
+			}
+		</script>
+	</body>
+</html>
+
+
