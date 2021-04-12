@@ -36,38 +36,38 @@
 			
 			
 			// прозрачен куб
-			var material = new THREE.MeshNormalMaterial({
+			var material = Physijs.createMaterial( new THREE.MeshNormalMaterial({
 				transparent: true,
 				opacity: 0.3,
 				depthWrite: false,
 				depthTest: false
-			} );
+			}), 1, 0 );
 
 			// долна страна
 			var geometry = new THREE.BoxBufferGeometry( 210, 1, 20 );
-			var wall = new THREE.Mesh( geometry, material );
+			var wall = new Physijs.BoxMesh( geometry, material, 0 );
 				wall.position.set( 0, -100, 0 );
 				scene.add( wall );
 				
 			// лява страна
 			var geometry = new THREE.BoxBufferGeometry( 1, 300, 12 );
-			var wall = new THREE.Mesh( geometry, material );
+			var	wall = new Physijs.BoxMesh( geometry, material, 0 );
 				wall.position.set( -105, 50, 0 );
 				scene.add( wall );
 				
 			// дясна страна
-			var wall = new THREE.Mesh( geometry, material );
+			var	wall = new Physijs.BoxMesh( geometry, material, 0 );
 				wall.position.set( 105, 50, 0 );
 				scene.add( wall );
 				
 			// предна страна
 			var geometry = new THREE.BoxBufferGeometry( 210, 300, 1 );
-			var wall = new THREE.Mesh( geometry, material );
+			var	wall = new Physijs.BoxMesh( geometry, material, 0 );
 				wall.position.set( 0, 50, 4 );
 				scene.add( wall );
 				
 			// задна страна
-			var wall = new THREE.Mesh( geometry, material );
+			var	wall = new Physijs.BoxMesh( geometry, material, 0 );
 				wall.position.set( 0, 50, -4 );
 				scene.add( wall );
 			
@@ -75,38 +75,60 @@
 			var geometry = new THREE.BoxBufferGeometry( 16, 80, 12 );
 			for( var i=-4; i<=4; i++ )
 			{
-				var	bar = new THREE.Mesh( geometry, material );
+				var	bar = new Physijs.BoxMesh( geometry, material, 0 );
 					bar.position.set( i*22, -60, 0 );
 					scene.add( bar );
 			}
 			
-			// прегради (нарочно не са на хубави места, намерете
-			// ги с експериментиране)
+			// прегради
 			var geometry = new THREE.BoxBufferGeometry( 5, 5, 10 );
-			var x0 = -80, n=9;
-			for( var y=-10; n>1; y+=10 )
+			var x0 = -4*22, n=9;
+			for( var y=-10; n>1; y+=12.07 )
 			{
 				for( var i=0; i<n; i++ )
 				{
-					var	bar = new THREE.Mesh( geometry, material );
+					var	bar = new Physijs.BoxMesh( geometry, material, 0 );
 						bar.rotation.z = Math.PI/4;
-						bar.position.set( x0+i*20, y, 0 );
+						bar.position.set( x0+i*22, y, 0 );
 						scene.add( bar );
 				}
 				
 				n--;
-				x0 += 10;
+				x0 += 22/2;
 			}
 			
 			// топчета
 			var geometry = new THREE.SphereBufferGeometry( 2.5, 20, 10 ),
-				material = new THREE.MeshPhongMaterial({color:'crimson'});
-				ball = new THREE.Mesh( geometry, material );
-				ball.position.set( 0, 110, 0 );
+				material = Physijs.createMaterial( new THREE.MeshPhongMaterial({color:'crimson'}), 0, 1 );
+				
+			var balls = 1;
+			var ball = undefined;
+			
+			// пускане на ново топче
+			function newBall( )
+			{
+				if( balls>130 ) return;
+				
+				balls++;
+
+				if( ball )
+				{
+					ball.removeEventListener( 'collision', newBall );
+					ball.applyCentralForce( new THREE.Vector3(THREE.Math.randFloat(-20,20),200,0) );
+				}
+				
+				ball = new Physijs.SphereMesh( geometry, material, 10 );
+					ball.position.set( THREE.Math.randFloat(-0.3,0.3), 110, 0 );
 				scene.add( ball );
+				
+				ball.addEventListener( 'collision', newBall );
+			}
+						
+			newBall();
 			
 			function animate()
 			{
+				scene.simulate( 1/10 );
 				scene.rotation.y = t/2;				
 			}
 		</script>

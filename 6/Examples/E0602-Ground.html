@@ -28,7 +28,7 @@
 			// земя
 			var geometry = new THREE.BoxBufferGeometry( 300, 4, 300 ),
 				material = Physijs.createMaterial( new THREE.MeshPhongMaterial({color:'lightgreen'}) );
-			var ground = new Physijs.BoxMesh( geometry, material, 1 );
+			var ground = new Physijs.BoxMesh( geometry, material, 0 );
 				ground.position.set( 0, -10, 0 );
 				ground.receiveShadow = true;
 			scene.add( ground );

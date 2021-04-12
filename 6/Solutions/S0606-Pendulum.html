@@ -52,26 +52,36 @@
 			
 			// махало 1
 			var geometry = new THREE.BoxBufferGeometry( 10, 30, 10 ),
-				material = new THREE.MeshPhongMaterial({color:'white'});
+				material = Physijs.createMaterial( new THREE.MeshPhongMaterial({color:'white'}), 1, 1 );
 				
-			pendulum1 = new THREE.Mesh( geometry, material );
+			pendulum1 = new Physijs.BoxMesh( geometry, material, 10 );
 				pendulum1.position.set( 0, 90, 0 );
 				pendulum1.castShadow = true;
 			var thread = new THREE.Mesh( new THREE.CylinderGeometry(0.5,0.5,40) );
 				thread.position.y = -20;
 				thread.castShadow = true;
 				pendulum1.add( thread );
-			var joint = new THREE.Mesh(	new THREE.CylinderBufferGeometry( 3, 3, 8, 12 ), material );
+			var joint = new THREE.Mesh(
+				new THREE.CylinderBufferGeometry( 3, 3, 8, 12 ),
+				material );
 				joint.castShadow = true;
 				joint.position.y = -40;
 				joint.rotation.z = Math.PI/2;
 				pendulum1.add( joint );
 				
+			// закачаме го
+			var constraint = new Physijs.HingeConstraint(
+				pendulum1, 
+				null,
+				new THREE.Vector3( 0, 90, 0 ),
+				new THREE.Vector3( 1, 0, 0 )
+			);
+
 			
 			// махало 2
 			var geometry = new THREE.SphereBufferGeometry( 10, 32, 16 );
 				
-			pendulum2 = new THREE.Mesh( geometry, material );
+			pendulum2 = new Physijs.SphereMesh( geometry, material, 10 );
 				pendulum2.position.set( 0, 0, 0 );
 				pendulum2.castShadow = true;
 			var thread = new THREE.Mesh( new THREE.CylinderGeometry(0.5,0.5,40) );
@@ -79,11 +89,26 @@
 				thread.castShadow = true;
 				pendulum2.add( thread );
 								
+			// закачаме го
+			var constraint2 = new Physijs.HingeConstraint(
+				pendulum2, 
+				pendulum1,
+				new THREE.Vector3( 0, 50, 0 ),
+				new THREE.Vector3( 1, 0, 0 )
+			);
+
 			scene.add( pendulum2 );
 			scene.add( pendulum1 );
+			scene.addConstraint( constraint );
+			scene.addConstraint( constraint2 );
 
+			// първоначален тласък
+			pendulum1.applyForce( new THREE.Vector3(0,0,1600), new THREE.Vector3(0,100,0) );
+			
 			function animate()
 			{
+				scene.simulate( 1/20 );
+				
 				scene.rotation.y = t/10;
 			}
 		</script>

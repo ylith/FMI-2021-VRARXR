@@ -31,15 +31,31 @@
 
 			// обект
 			var geometry = new THREE.SphereBufferGeometry( 15, 32, 16 ),
-				material = new THREE.MeshPhongMaterial({color:'black', shininess:50}),
-				object = new THREE.Mesh( geometry, material, 10 );
+				material = Physijs.createMaterial( new THREE.MeshPhongMaterial({color:'black', shininess:50}) )
+				object = new Physijs.SphereMesh( geometry, material, 10 );
 				object.position.set( 0, 35, 0 );
 				object.castShadow = true;
 			scene.add( object );
 			
+			window.addEventListener( 'mousemove', onMouseMove, false );
+
+			var pos = 0;
+			function onMouseMove(event)
+			{
+				// относителна хоризонтална позиция на мишката
+				pos = event.clientX/window.innerWidth-0.5;
+			}
+			
 			function animate()
 			{
+				scene.simulate( 1/20 );
 				
+				if( Math.abs(object.getLinearVelocity().x)<0.1 )
+				{
+					object.applyCentralForce( new THREE.Vector3(0,10,0) );
+				}
+				ground.rotation.z = THREE.Math.lerp( ground.rotation.z, pos, 0.1 );
+				ground.__dirtyRotation = true;
 			}
 		</script>
 	</body>
