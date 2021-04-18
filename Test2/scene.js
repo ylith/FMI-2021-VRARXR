@@ -43,13 +43,31 @@ function sceneInit()
 function sceneObjects(radius)
 {
 	const loader = new THREE.TextureLoader();
+	loader.setCrossOrigin('anonymous');
 	var ground = new THREE.Group();
 	var offset = Math.PI/6;
 	var radiusWithOffset = Math.sqrt(radius * radius + radius * radius - 2 * radius * radius * Math.cos(Math.PI - 2 * offset)) / 2;
 	var yOffset = Math.sqrt(radius * radius - radiusWithOffset * radiusWithOffset);
 	var geometry = new THREE.SphereGeometry( radius, 32, 32, 0, 2*Math.PI, 0, Math.PI/2 - offset);
-	const texture = loader.load( 'https://www.all3dfree.net/uploads/5/1/9/6/51967249/choppy_green_grass_textures_seamless_18.jpg' );
-	var material = new THREE.MeshLambertMaterial( {color: "green", map: texture} );
+	var material = new THREE.MeshLambertMaterial( {color: "green"} );
+	// loader.load(
+	// // resource URL
+	// 	'choppy_green_grass_textures_seamless_18.jpg',
+
+	// 	// onLoad callback
+	// 	function ( texture ) {
+	// 		// in this example we create the material when the texture is loaded
+	// 		material.map = texture;
+	// 	},
+
+	// 	// onProgress callback currently not supported
+	// 	undefined,
+
+	// 	// onError callback
+	// 	function ( err ) {
+	// 		console.error( 'An error happened.' );
+	// 	}
+	// );
 	var material2 = new THREE.MeshPhongMaterial( {color: "darkgreen", side: THREE.DoubleSide} );
 	gg = new THREE.Mesh( geometry, material2 );
 	gg.rotateX(Math.PI);
