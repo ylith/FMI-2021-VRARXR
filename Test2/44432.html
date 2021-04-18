@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Лунапарк</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="StereoEffect.js"></script>
+		<script src="OrbitControls.js"></script>
+		<script src="vax.js"></script>
+		<script src="scene.js"></script>
+		<script src="shapeLibrary.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			vaxInitParallax(eyeSep=1);
+			var radius = 300;
+			sceneInit();
+			sceneObjects(radius);
+
+			// орбитална навигация
+			var control = new THREE.OrbitControls( camera, renderer.domElement );
+			control.minDistance = 50;		// разстояние
+			control.maxDistance = 500;
+			control.minPolarAngle = 0.1; 	// вертикален ъгъл
+			control.maxPolarAngle = 1.4; 
+			control.rotateSpeed = 0.3;		// скорост на въртене
+			control.enableDamping = true;	// с инерция
+			control.dampingFactor = 0.1;
+			control.enablePan = false;		// без плъзгане
+
+			camera.position.set(0,350,500);
+			camera.lookAt(new THREE.Vector3(0,50,0));
+
+			var trees = 10;
+			for( var i=0; i<trees; i++ )
+			{
+				var t = tree(5, getRandom(radius/4, radius/3));
+				var pos =  new THREE.Vector3().setFromSphericalCoords(getRandom(radius - radius * 0.3, radius - radius * 0.2), Math.PI/2, 2*Math.PI*Math.random());
+				t.position.set(pos.x, 0 , pos.z);
+				
+				scene.add( t );
+			}
+			var pineTrees = 10;
+			for( var i=0; i<pineTrees; i++ )
+			{
+				var t = pineTree(getRandom(3,5), radius/3);
+				var pos =  new THREE.Vector3().setFromSphericalCoords(0.8 * radius, Math.PI/2, 2*Math.PI*Math.random());
+				t.position.set(pos.x, 0 , pos.z);
+				
+				scene.add( t );
+			}
+
+			var ferris = wheel(radius/4);
+			scene.add(ferris);
+			w = ferris.getObjectByName("wheel");
+
+			const speed = 0.5;
+	
+			var people = [];
+			for (var i = 0; i < 10; i++) {
+				var p = getRandomPerson(radius/ 20);
+				var pos = new THREE.Vector3().setFromSphericalCoords(getRandom(0.2, 0.5) * radius, Math.PI/2, 2*Math.PI*Math.random());
+				p.position.set(pos.x, 0 , pos.z);
+				scene.add(p);
+				people.push(p);
+			}
+
+			for (var i = 0; i < 4; i++) {
+				var p = pavilion(getRandom(radius/6, radius/4),getRandom(radius/15, radius/10));
+				var pos = new THREE.Vector3().setFromSphericalCoords(getRandom(0.5, 0.7) * radius, Math.PI/2, 2*Math.PI*Math.random());
+				p.position.set(pos.x, 0 , pos.z);
+				scene.add(p);
+				var p2 = pavillion2(getRandom(radius/5, radius/20),getRandom(radius/5, radius/20),getRandom(radius/5, radius/20));
+				var pos2 = new THREE.Vector3().setFromSphericalCoords(getRandom(0.5, 0.7) * radius, Math.PI/2, 2*Math.PI*Math.random());
+				p2.position.set(pos2.x, 0 , pos2.z);
+				// p2.rotation.set(0, getRandom(0, Math.PI*2), 0);
+				scene.add(p2);
+			}
+
+			
+			function animate()
+			{
+				// control.update();
+				w.rotation.set(0, 0, t * speed);
+
+				for (var i = 0; i < w.children.length; i++) {
+					if (w.children[i].name == "cabin") {
+						w.children[i].rotation.set(0, 0, -t * speed);
+					}
+				}
+				for (var i = 0; i < people.length; i++) {
+					people[i].rotation.set(0, Math.sin(t/10 * i), 0);
+				}
+			}
+		</script>
+	</body>
+</html>
+
+
