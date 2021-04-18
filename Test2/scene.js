@@ -1,7 +1,7 @@
 // Общи настройки на сцената
 function sceneInit()
 {
-	vaxInit();
+	// vaxInit();
 	
 	// включваме сенки
 	renderer.shadowMap.enabled = true;
