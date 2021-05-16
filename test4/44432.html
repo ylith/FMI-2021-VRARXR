@@ -23,13 +23,6 @@
 			onWindowResize();
 
 
-			//lights
-			const ambient = new THREE.AmbientLight( 0xffffff );
-			scene.add( ambient );
-
-			pointLight = new THREE.PointLight( 0xffffff, 5 );
-			scene.add( pointLight );
-
 			const cubeMapUrls = [
 				'cube/posx.jpg', 'cube/negx.jpg',
 				'cube/posy.jpg', 'cube/negy.jpg',
