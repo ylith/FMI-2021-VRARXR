@@ -30,11 +30,10 @@ function sceneInit()
 	scene.add( ambientLight );
 	
 	// прожекторна светлина за сенки
-	spotLight = new THREE.SpotLight('cornflowerblue',0.5,0,1.0,1.0);
+	spotLight = new THREE.SpotLight('white',0.5,0,1.0,1.0);
 	spotLight.shadow.mapSize = new THREE.Vector2( 1024*2, 1024*2 );
 	spotLight.position.set( 0, 800, 0 );
 	spotLight.castShadow = true;
-	spotLight.intensity = 0.75;
 	scene.add( spotLight );
 }
 
@@ -70,15 +69,10 @@ function sceneObjects(radius)
 	// 	}
 	// );
 	var material2 = new THREE.MeshPhongMaterial( {color: "darkgreen", side: THREE.DoubleSide} );
-	var material3 = new THREE.MeshPhysicalMaterial( {color: "azure", transparent:true, opacity:0.1,roughness:0, reflectivity:1, specular:"blue",refractionRatio:1} );
 	gg = new THREE.Mesh( geometry, material2 );
 	gg.rotateX(Math.PI);
 	gg.receiveShadow = true;
 	ground.add( gg );
-
-	var sphere = new THREE.Mesh( new THREE.SphereGeometry(radius + 5, 32, 32), material3 );
-	sphere.translateY(yOffset);
-	scene.add(sphere);
 
 	var topGeo = new THREE.CylinderGeometry(radiusWithOffset, radiusWithOffset, 5, 32);
 	// topGeo.translate(0, -1 * radiusWithOffset/2, 0);
