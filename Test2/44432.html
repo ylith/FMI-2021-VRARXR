@@ -25,15 +25,15 @@
 			sceneObjects(radius);
 
 			// орбитална навигация
-			var control = new THREE.OrbitControls( camera, renderer.domElement );
-			control.minDistance = 50;		// разстояние
-			control.maxDistance = 500;
-			control.minPolarAngle = 0.1; 	// вертикален ъгъл
-			control.maxPolarAngle = 1.4; 
-			control.rotateSpeed = 0.3;		// скорост на въртене
-			control.enableDamping = true;	// с инерция
-			control.dampingFactor = 0.1;
-			control.enablePan = false;		// без плъзгане
+			// var control = new THREE.OrbitControls( camera, renderer.domElement );
+			// control.minDistance = 50;		// разстояние
+			// control.maxDistance = 500;
+			// control.minPolarAngle = 0.1; 	// вертикален ъгъл
+			// control.maxPolarAngle = 1.4; 
+			// control.rotateSpeed = 0.3;		// скорост на въртене
+			// control.enableDamping = true;	// с инерция
+			// control.dampingFactor = 0.1;
+			// control.enablePan = false;		// без плъзгане
 
 			camera.position.set(0,350,500);
 			camera.lookAt(new THREE.Vector3(0,50,0));

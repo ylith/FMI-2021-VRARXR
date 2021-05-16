@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Зарчета</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="physi.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+		<script src="scene.js"></script>
+		<script src="OrbitControls.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			sceneInit();
+
+			var size = 250;
+
+			// светлина и сенки
+			renderer.shadowMap.enabled = true;
+			light.shadow.mapSize = new THREE.Vector2( 1024*2, 1024*2 );
+			light.position.set(0,size,0);
+			light.castShadow = true;
+
+			// по-добра позиция на камерата
+			camera.position.set(60,size+10,80);
+			camera.lookAt(new THREE.Vector3(0,0,0));
+
+
+			// орбитална навигация
+			var control = new THREE.OrbitControls( camera, renderer.domElement );
+			control.minDistance = 50;		// разстояние
+			control.maxDistance = 500;
+			control.minPolarAngle = 0.1; 	// вертикален ъгъл
+			control.maxPolarAngle = 1.4; 
+			control.rotateSpeed = 0.3;		// скорост на въртене
+			control.enableDamping = true;	// с инерция
+			control.dampingFactor = 0.1;
+			control.enablePan = false;		// без плъзгане
+
+
+			var diceSize = 35;
+			var box = emptyBox(size, size, size);
+			box.position.set(0, 0, 0);
+			scene.add(box);
+			var force = 8000;
+
+			die1 = dice(diceSize);
+			die2 = dice(diceSize);
+			die2.position.set(size/4, size/2, size/4);
+			die1.position.set(-size/4, size/2, -size/4);
+			die1.addEventListener( 'collision', hit );
+			die2.addEventListener( 'collision', hit );
+
+			function hit(otherObject)
+			{
+				if (otherObject.name == "die") {
+					console.log("hit");
+					console.log(otherObject);
+					otherObject.setAngularVelocity( new THREE.Vector3( Math.random(), Math.random(), Math.random() ) );
+				}
+			}
+
+			scene.add(die1);
+			scene.add(die2);
+
+		    die1.applyCentralForce( new THREE.Vector3( Math.random() * force, -2000, Math.random() * force ) );
+		    die2.applyCentralForce( new THREE.Vector3( Math.random() * -force, -2000, Math.random() * -force ) );
+		    die1.setAngularVelocity( new THREE.Vector3( Math.random(), Math.random(), Math.random() ) );
+		    die2.setAngularVelocity( new THREE.Vector3( Math.random(), Math.random(), Math.random() ) );
+
+
+			window.addEventListener("keypress", function(e) {
+				if(e.keyCode == 32) { //space
+					scene.remove(die1);
+					scene.remove(die2);
+	    			die1 = dice(diceSize);
+					die2 = dice(diceSize);
+					die2.position.set(size/4, size/2, size/4);
+					die1.position.set(-size/4, size/2, -size/4);
+
+					scene.add(die1);
+					scene.add(die2);
+
+				    die1.applyCentralForce( new THREE.Vector3( Math.random() * force, -2000, Math.random() * force ) );
+				    die2.applyCentralForce( new THREE.Vector3( Math.random() * -force, -2000, Math.random() * -force ) );
+				    die1.setAngularVelocity( new THREE.Vector3( Math.random(), Math.random(), Math.random() ) );
+				    die2.setAngularVelocity( new THREE.Vector3( Math.random(), Math.random(), Math.random() ) );
+	    			die1.addEventListener( 'collision', hit );
+					die2.addEventListener( 'collision', hit );
+			    }
+			});
+
+			// // пилон
+			// var p = pillar( new THREE.Vector3(0, 50, 0), ground.material );
+			// scene.add( p );
+			
+			// // врата
+			// var door = new Physijs.BoxMesh(
+			// 	new THREE.BoxBufferGeometry( 60, 40, 3 ),
+			// 	Physijs.createMaterial( new THREE.MeshPhongMaterial({color:'tomato'}) ),
+			// 	1
+			// );
+			// door.castShadow = true;
+			// door.receiveShadow = true;
+			// door.position.x = 30;
+			// door.position.y = 30;
+			// scene.add( door );
+			
+			// // пантово ограничение
+			// var constraint = new Physijs.HingeConstraint(
+			// 	door, 
+			// 	null,
+			// 	new THREE.Vector3( 0, 30, 0 ),
+			// 	new THREE.Vector3( 0, 1, 0 )
+			// );
+			// scene.addConstraint( constraint );
+			
+			// // кубче
+			// var cube = new Physijs.BoxMesh(
+			// 	new THREE.BoxBufferGeometry( 15, 15, 15 ),
+			// 	Physijs.createMaterial( new THREE.MeshPhongMaterial({color:'gold'}) ),
+			// 	1
+			// );
+			// cube.castShadow = true;
+			// cube.receiveShadow = true;
+			// cube.position.set( 50, 50, 60 );
+			// scene.add( cube );
+			
+
+			//cube.applyForce( new THREE.Vector3( 0, 0, -600 ), new THREE.Vector3( 1, -1, 0 ) );
+			
+			function animate()
+			{
+				control.update();
+			
+				scene.simulate( 1/20 );
+			}
+		</script>
+	</body>
+</html>
+
+

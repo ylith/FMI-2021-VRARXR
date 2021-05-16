@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>S0607: Триене</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="stats.min.js"></script>
+		<script src="physi.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+		<script src="scene.js"></script>		
+		<script src="camera.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			sceneInit();
+
+			// кутия
+			var plane = new THREE.BoxBufferGeometry(100,4,100);
+			var boxMat = new THREE.MeshPhongMaterial({color:'lightgreen', transparent: true, opacity: 0.8}, 1, 1);
+			var box = new Physijs.BoxMesh( plane, boxMat, 0);
+			
+			var leftSide = box.clone();
+			var rightSide = box.clone();
+			var backSide = box.clone();
+			var frontSide = box.clone();
+			
+			box.position.set( 0, -30, 0 );
+			leftSide.position.set(52,48,0);
+			rightSide.position.set(-52,48,0);
+			backSide.position.set(0,48,48);
+			frontSide.position.set(0,48,-48);
+			
+			leftSide.rotation.set(0,0,Math.PI/2);
+			rightSide.rotation.set(0,0,Math.PI/2);
+			backSide.rotation.set(Math.PI/2,0,0);
+			frontSide.rotation.set(Math.PI/2,0,0);
+			
+			box.receiveShadow = true;
+			leftSide.receiveShadow = true;
+			rightSide.receiveShadow = true;
+			backSide.receiveShadow = true;
+			frontSide.receiveShadow = true;
+			
+			box.add(leftSide, rightSide, backSide, frontSide)
+			scene.add(box);
+
+			function createDice()
+			{
+				var geometry = new THREE.BoxBufferGeometry( 20, 20, 20 );
+				var sphere = new THREE.SphereBufferGeometry( 2, 20, 20 );
+				
+				var materialDice = Physijs.createMaterial( new THREE.MeshPhongMaterial({color:'white', shininess:50}), 1, 0 );
+				var materialDot = new THREE.MeshPhongMaterial({color:'black', shininess:50});
+				
+				var singleGeometry = new THREE.Geometry();
+				
+				dice = new Physijs.BoxMesh( geometry, materialDice, 10 );
+				dice.position.set( 0, 85, 0 );
+				
+				//sphere.translate(10,0,0);
+				
+				var boxMesh = new THREE.Mesh(geometry);
+				
+				var dot1 = new THREE.Mesh(sphere, materialDot);
+				
+				var dot2 = dot1.clone();
+				var dot3 = dot1.clone();
+				
+				var dot4 = dot1.clone();
+				var dot5 = dot1.clone();
+				var dot6 = dot1.clone();
+				
+				var dot7 = dot1.clone();
+				var dot8 = dot1.clone();
+				var dot9 = dot1.clone();
+				var dot10 = dot1.clone();
+				
+				var dot11 = dot1.clone();
+				var dot12 = dot1.clone();
+				var dot13 = dot1.clone();
+				var dot14 = dot1.clone();
+				var dot15 = dot1.clone();
+				
+				var dot16 = dot1.clone();
+				var dot17 = dot1.clone();
+				var dot18 = dot1.clone();
+				var dot19 = dot1.clone();
+				var dot20 = dot1.clone();
+				var dot21 = dot1.clone();						
+
+				dice.add(dot1, dot2, dot3, dot4, dot5, dot6, dot7, dot8, dot9, dot10, dot11, dot12, dot13, dot14, dot15, dot16, dot17, dot18, dot19, dot20, dot21);
+				
+				dot1.position.set(10,0,0);
+				
+				dot2.position.set(-5,10,-5);
+				dot3.position.set(5,10,5);
+				
+				dot4.position.set(5,5,10);
+				dot5.position.set(0,0,10);
+				dot6.position.set(-5,-5,10);
+				
+				dot7.position.set(5,5,-10);
+				dot8.position.set(-5,-5,-10);
+				dot9.position.set(5,-5,-10);
+				dot10.position.set(-5,5,-10);
+				
+				dot11.position.set(5,-10,5);
+				dot12.position.set(-5,-10,-5);
+				dot13.position.set(0,-10,0);
+				dot14.position.set(5,-10,-5);
+				dot15.position.set(-5,-10,5);
+				
+				dot16.position.set(-10,5,5);
+				dot17.position.set(-10,0,5);
+				dot18.position.set(-10,-5,5);
+				dot19.position.set(-10,5,-5);
+				dot20.position.set(-10,0,-5);
+				dot21.position.set(-10,-5,-5);
+				
+				dot1.scale.set(0.1,1,1);
+				
+				dot2.scale.set(1,0.1,1);
+				dot3.scale.set(1,0.1,1);
+				
+				dot4.scale.set(1,1,0.1);
+				dot5.scale.set(1,1,0.1);
+				dot6.scale.set(1,1,0.1);
+				
+				dot7.scale.set(1,1,0.1);
+				dot8.scale.set(1,1,0.1);
+				dot9.scale.set(1,1,0.1);
+				dot10.scale.set(1,1,0.1);
+				
+				dot11.scale.set(1,0.1,1);
+				dot12.scale.set(1,0.1,1);
+				dot13.scale.set(1,0.1,1);
+				dot14.scale.set(1,0.1,1);
+				dot15.scale.set(1,0.1,1);
+				
+				dot16.scale.set(0.1,1,1);
+				dot17.scale.set(0.1,1,1);
+				dot18.scale.set(0.1,1,1);
+				dot19.scale.set(0.1,1,1);
+				dot20.scale.set(0.1,1,1);
+				dot21.scale.set(0.1,1,1);
+				
+				dice.castShadow = true;
+					
+				return dice;
+				
+			}
+			var dice1 = createDice();
+			var dice2 = createDice();
+			
+			dice1.position.set( 25, 65, 25 );
+			dice2.position.set( -25, 65, -25 );
+			
+			scene.add(dice1);
+			scene.add(dice2);
+			
+			dice1.setAngularVelocity( new THREE.Vector3( Math.random(), Math.random(), Math.random() ) );
+			dice1.applyCentralForce( new THREE.Vector3( Math.random() * -30000, Math.random() * -20000, Math.random() * -20000 ) );
+			
+			dice2.setAngularVelocity( new THREE.Vector3( Math.random(), Math.random(), Math.random() ) );
+			dice2.applyCentralForce( new THREE.Vector3( Math.random() * 30000, Math.random() * -20000, Math.random() * 20000 ) );
+			
+			window.addEventListener( 'keypress', onKeyPress, false );
+
+			var pos = 0;
+			function onKeyPress(event)
+			{
+				// относителна хоризонтална позиция на мишката
+				//console.log("a");
+				scene.remove(dice1);
+				scene.remove(dice2);
+				
+				dice1 = createDice();
+				dice2 = createDice();
+				
+				dice1.position.set( 25, 65, 25 );
+				dice2.position.set( -25, 65, -25 );
+				
+				scene.add(dice1);
+				scene.add(dice2);
+				
+				dice1.setAngularVelocity( new THREE.Vector3( Math.random(), Math.random(), Math.random() ) );
+				dice1.applyCentralForce( new THREE.Vector3( Math.random() * -30000, Math.random() * -20000, Math.random() * -20000 ) );
+				
+				dice2.setAngularVelocity( new THREE.Vector3( Math.random(), Math.random(), Math.random() ) );
+				dice2.applyCentralForce( new THREE.Vector3( Math.random() * 30000, Math.random() * -20000, Math.random() * 20000 ) );
+
+			}
+			
+			function animate()
+			{
+				scene.simulate( 1/20 );
+				
+				//if( Math.abs(object1.getLinearVelocity().x)<0.1 )
+				//	object1.applyCentralForce( new THREE.Vector3(0,1,0) );
+				//	
+				//if( Math.abs(object2.getLinearVelocity().x)<0.1 )
+				//	object2.applyCentralForce( new THREE.Vector3(0,1,0) );
+				
+				cameraAnimate();
+			}
+		</script>
+	</body>
+</html>
+
+

@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>S0810: В скоростно влакче</title>
+		<meta charset="utf-8">
+		
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<script src="three.min.js"></script>
+		<script src="WebGL.js"></script>
+		<script src="vax.js"></script>
+		<script src="scene.js"></script>
+		<script src="vaxAnaglyphEffect.js"></script>
+		</head>
+	
+	<body>
+		<script>
+			sceneInit( vaxInitAnaglyph, 2 );
+			sceneObjects( );
+
+			// махаме вече излишния обект
+			scene.remove( object );
+
+			// траектория на тунела на влакчето - поредица от контролни точки
+			var points = [];
+			for( var i=0; i<200; i++ )
+			{
+				var angle = i/200*2*Math.PI;
+				
+				points.push( new THREE.Vector3( 
+					70*Math.sin(2*angle)-40*Math.cos(3*angle), 
+					55+20*Math.sin(7*angle)+30*Math.sin(4*angle), 
+					70*Math.cos(3*angle)+40*Math.sin(2*angle)
+				) );
+			}
+			
+			// генериране на плавна крива линия от котролните точки
+			var curve = new THREE.CatmullRomCurve3( points, true, 'chordal' );
+
+			// самият тунел - плътната част
+			var geometry = new THREE.TubeBufferGeometry( curve, 400, 5, 20, false ),
+				material = new THREE.MeshPhongMaterial( { color: 'orange', opacity: 0.8, transparent: true, side: THREE.BackSide } ),
+				mesh = new THREE.Mesh( geometry, material );
+				mesh.castShadow = true;
+			scene.add( mesh );
+
+			// самият тунел - арматурата
+			var material = new THREE.MeshPhongMaterial( { color: 'black', wireframe: true } ),
+				mesh = new THREE.Mesh( geometry, material );
+				mesh.castShadow = true;
+			scene.add( mesh );
+
+			var pos = tan = new THREE.Vector3( 0, 1, 0 );
+			
+			function animate()
+			{
+				// позицията на камерата
+				pos = curve.getPoint( (t/20)%1 );
+				camera.position.copy( pos );
+				
+				// светлина малко напред
+				light.position.copy( curve.getPoint( (t/20+0.1)%1 ) );
+				
+				// посока на гледане на камерата в линейна комбинация
+				// с предходната посока, за да има гладко въртене
+				tan = tan.lerp( curve.getTangent( (t/20+0.02)%1 ), 0.02);
+				camera.lookAt( pos.add(tan) );				
+			}
+			
+		</script>
+	</body>
+</html>
+
+
