@@ -22,6 +22,34 @@
 			camera.fov = 30;
 			onWindowResize();
 	
+			// var controls = new THREE.OrbitControls( camera, renderer.domElement );
+			// 	controls.enableZoom = false;
+			// 	controls.enablePan = false;
+			// 	controls.enableDamping = true;
+			// 	controls.minPolarAngle = 0.1;
+			// 	controls.maxPolarAngle = Math.PI - 0.1;
+			// 	controls.dampingFactor = 0.1;
+
+			
+			setupLights(scene);
+
+			//lights
+			const ambient = new THREE.AmbientLight( 0xffffff );
+			scene.add( ambient );
+
+			pointLight = new THREE.PointLight( 0xffffff, 5 );
+			scene.add( pointLight );
+
+			const cubeMapUrls = [
+				'cube/posx.jpg', 'cube/negx.jpg',
+				'cube/posy.jpg', 'cube/negy.jpg',
+				'cube/posz.jpg', 'cube/negz.jpg' ];
+			const background = new THREE.CubeTextureLoader().load( cubeMapUrls );
+			scene.background = background;
+			const refractionCube = new THREE.CubeTextureLoader().load( cubeMapUrls );
+			refractionCube.mapping = THREE.CubeRefractionMapping;
+			refractionCube.anisotropy = renderer.getMaxAnisotropy();
+			
 		</script>
 		
 	</body>
